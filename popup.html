@@ -1,0 +1,67 @@
+<!doctype html>
+<!--
+ This page is shown when the extension button is clicked, because the
+ "browser_action" field in manifest.json contains the "default_popup" key with
+ value "popup.html".
+ -->
+<html>
+  <head>
+    <title>YOU WORK!</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            white-space: nowrap;
+        }
+
+        h1 {
+            font-size: 15px;
+            color: white;
+            padding: 8px 6px;
+            background-color: #ff3d00;
+            border-radius: 10px 10px 0 0;
+            text-align: center;
+        }
+
+        #container {
+            padding: 8px 10px;
+            align-items: center;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        img {
+            width 150px;
+            height: 150px;
+        }
+    </style>
+
+    <!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      -
+      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
+    -->
+    <script src="popup.js"></script>
+</head>
+
+<body>
+    <h1>YouWork!</h1>
+    <img src="icon.png" alt="You Work Icon">
+    <div id="container">
+        <span>Study?</span>
+        <select id="dropdown">
+        <option value="disabled">Disabled</option>
+        <option value="enabled">Enabled</option>
+      </select>
+    </div>
+    <div id="container">
+        Really?<input type="checkbox" id='page'>
+    </div>
+</body>
+</html>
