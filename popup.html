@@ -39,20 +39,30 @@
             width 150px;
             height: 150px;
         }
+
+        span {
+            font-weight: bold;
+        }
+
+        img {
+            transition-duration: 0.2s;
+        }
+
+        img:hover {
+            transform: scale(1.1)
+        }
+
+        img:active {
+            transform: scale(1)
+        }
     </style>
 
-    <!--
-      - JavaScript and HTML must be in separate files: see our Content Security
-      - Policy documentation[1] for details and explanation.
-      -
-      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
-    -->
     <script src="popup.js"></script>
 </head>
 
 <body>
     <h1>YouWork!</h1>
-    <img src="icon.png" alt="You Work Icon">
+    <img src="icon.png" alt="You Work Icon" id='button'>
     <div id="container">
         <span>Study?</span>
         <select id="dropdown">
@@ -61,7 +71,18 @@
       </select>
     </div>
     <div id="container">
-        Really?<input type="checkbox" id='page'>
+        <span>Really?</span><input type="checkbox" id='page'>
+    </div>
+    <br>
+    <div id="container">
+        <span>Timer</span>
+        <select id="timer">
+        <option selected value=''>Off</option>
+        <option value="15min">15 min</option>
+        <option value="30min">30 min</option>
+        <option value="45min">45 min</option>
+        <option value="1hour">1 hour</option>
+      </select>
     </div>
 </body>
 </html>
