@@ -16,7 +16,7 @@ function getCurrentTabUrl(callback) {
 
     chrome.tabs.query(queryInfo, (tabs) => {
         var tab = tabs[0];
-        var url = tab.url.substr(0, 23);
+        url = tab.url.substr(0, 23);
         console.log(url);
         console.assert(typeof url == 'string', 'tab.url should be a string');
         callback(url);
@@ -41,8 +41,7 @@ function setMode(choice, url) {
         chrome.tabs.insertCSS(null, {
             code: "#dismissable.style-scope.ytd-shelf-renderer {visibility: hidden;} !important"
         })
-    }
-    if (!page.checked || choice == 'disabled') {
+    } else if (!page.checked || choice == 'disabled') {
         chrome.tabs.insertCSS(null, {
             code: "#dismissable.style-scope.ytd-shelf-renderer {visibility: visible;} !important"
         })
@@ -63,7 +62,6 @@ function saveChoice(url, choice) {
 
 function getSavedTick() {
     chrome.storage.sync.get("ticked", function (obj) {
-        console.log(obj['ticked']);
         page.checked = obj['ticked'];
         setMode(dropdown.value, url);
     });
@@ -94,9 +92,9 @@ function timerRun(time, url) {
 
 function timerGo(hour, minute, url) {
     startTime = new Date();
-    loop = window.setInterval(function() {
+    loop = window.setInterval(function () {
         var now = new Date();
-        if (now.getSeconds()+now.getHours() === startTime.getSeconds()+startTime.getHours() + minute + hour) {
+        if (now.getSeconds() + now.getHours() === startTime.getSeconds() + startTime.getHours() + minute + hour) {
             setMode('enabled', url);
             dropdown.value = 'enabled';
             saveChoice(url, 'enabled');
@@ -111,26 +109,26 @@ document.addEventListener('DOMContentLoaded', () => {
         var dropdown = document.getElementById('dropdown');
         var page = document.getElementById('page');
         var timer = document.getElementById('timer');
+
         getSavedChoice(url, (savedChoice) => {
             if (savedChoice) {
-                setMode(savedChoice, url);
                 dropdown.value = savedChoice;
-            }
+            };
+        });
 
-            getSavedTick();
+        getSavedTick();
 
-            dropdown.addEventListener('change', () => {
-                setMode(dropdown.value, url);
-                saveChoice(url, dropdown.value);
-            });
-            page.addEventListener('change', () => {
-                setMode(dropdown.value, url);
-                saveTick();
-            });
+        dropdown.addEventListener('change', () => {
+            setMode(dropdown.value, url);
+            saveChoice(url, dropdown.value);
+        });
+        page.addEventListener('change', () => {
+            setMode(dropdown.value, url);
+            saveTick();
+        });
 
-            timer.addEventListener('change', () => {
-                timerRun(timer.value, url);
-            });
+        timer.addEventListener('change', () => {
+            timerRun(timer.value, url);
         });
 
         document.getElementById('button').addEventListener('click', function () {
