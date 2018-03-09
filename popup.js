@@ -8,6 +8,9 @@
  * @param {function(string)} callback called when the URL of the current tab
  *   is found.
  */
+
+var active = false;
+
 function getCurrentTabUrl(callback) {
     var queryInfo = {
         active: true,
@@ -73,35 +76,62 @@ function saveTick() {
     });
 }
 
+function saveTimer() {
+    chrome.storage.sync.set({
+        'active': active,
+        'minute': minute,
+        'hour': hour,
+        'started': startTime
+    });
+}
+
+function getSavedTimer() {
+    chrome.storage.sync.get("active", function (obj) {
+        active = obj['active'];
+    });
+    chrome.storage.sync.get("minute", function (obj) {
+        minute = obj['minute'];
+    });
+    chrome.storage.sync.get("hour", function (obj) {
+        hour = obj['hour'];
+    });
+    chrome.storage.sync.get("started", function (obj) {
+        startTime = obj['started'];
+    });
+};
+
 function timerRun(time, url) {
-    if (!time) {
-        return
+    startTime = new Date();
+    startTime = startTime.getMinutes() + startTime.getHours() /////////////////////////////////////////////////////
+
+    if (!time || time == '') {
+        active = false;
     }
 
     if (time == '15min') {
-        timerGo(0, 15, url);
-    } else if (time == '30min') {
-        timerGo(0, 3, url);
-    } else if (time == '45min') {
-        timerGo(0, 45, url);
-    } else if (time == '1hour') {
-        timerGo(1, 0, url);
+        active = true;
+        minute = 1;
+        hour = 0;
     }
 
-}
+    if (time == '30min') {
+        active = true;
+        minute = 15;
+        hour = 0;
+    }
 
-function timerGo(hour, minute, url) {
-    startTime = new Date();
-    loop = window.setInterval(function () {
-        var now = new Date();
-        if (now.getSeconds() + now.getHours() === startTime.getSeconds() + startTime.getHours() + minute + hour) {
-            setMode('enabled', url);
-            dropdown.value = 'enabled';
-            saveChoice(url, 'enabled');
-            timer.value = '';
-            clearInterval(loop);
-        }
-    }, 600)
+    saveTimer();
+
+    //    if (time == '15min') {
+    //        timerGo(0, 15, url);
+    //    } else if (time == '30min') {
+    //        timerGo(0, 3, url);
+    //    } else if (time == '45min') {
+    //        timerGo(0, 45, url);
+    //    } else if (time == '1hour') {
+    //        timerGo(1, 0, url);
+    //    }
+
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -115,6 +145,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 dropdown.value = savedChoice;
             };
         });
+
+        getSavedTimer();
+
+        setInterval(function () {
+            if (active == true) {
+                console.log('active');
+                now = new Date();
+                if (now.getMinutes() + now.getHours() === startTime + minute + hour) {
+                    setMode('enabled', url);
+                    dropdown.value = 'enabled';
+                    saveChoice(url, 'enabled');
+                    timer.value = '';
+                    active = false;
+                    saveTimer();
+                }
+            }
+
+        }, 1000)
 
         getSavedTick();
 
