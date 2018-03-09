@@ -80,7 +80,6 @@ function saveTimer() {
     chrome.storage.sync.set({
         'active': active,
         'minute': minute,
-        'hour': hour,
         'started': startTime
     });
 }
@@ -92,9 +91,6 @@ function getSavedTimer() {
     chrome.storage.sync.get("minute", function (obj) {
         minute = obj['minute'];
     });
-    chrome.storage.sync.get("hour", function (obj) {
-        hour = obj['hour'];
-    });
     chrome.storage.sync.get("started", function (obj) {
         startTime = obj['started'];
     });
@@ -102,7 +98,7 @@ function getSavedTimer() {
 
 function timerRun(time, url) {
     startTime = new Date();
-    startTime = startTime.getMinutes() + startTime.getHours() /////////////////////////////////////////////////////
+    startTime = startTime.getMinutes() /////////////////////////////////////////////////////
 
     if (!time || time == '') {
         active = false;
@@ -110,28 +106,25 @@ function timerRun(time, url) {
 
     if (time == '15min') {
         active = true;
-        minute = 1;
-        hour = 0;
+        minute = 15;
     }
 
     if (time == '30min') {
         active = true;
-        minute = 15;
-        hour = 0;
+        minute = 30;
+    }
+
+    if (time == '45min') {
+        active = true;
+        minute = 45;
+    }
+
+    if (time == '1hour') {
+        active = true;
+        minute = 60;
     }
 
     saveTimer();
-
-    //    if (time == '15min') {
-    //        timerGo(0, 15, url);
-    //    } else if (time == '30min') {
-    //        timerGo(0, 3, url);
-    //    } else if (time == '45min') {
-    //        timerGo(0, 45, url);
-    //    } else if (time == '1hour') {
-    //        timerGo(1, 0, url);
-    //    }
-
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -150,9 +143,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setInterval(function () {
             if (active == true) {
-                console.log('active');
                 now = new Date();
-                if (now.getMinutes() + now.getHours() === startTime + minute + hour) {
+                console.log(now.getMinutes() + now.getHours());
+                if (now.getMinutes() + now.getHours() === startTime + minute) {
                     setMode('enabled', url);
                     dropdown.value = 'enabled';
                     saveChoice(url, 'enabled');
@@ -162,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-        }, 1000)
+        }, 6000)
 
         getSavedTick();
 
