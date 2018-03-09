@@ -20,7 +20,6 @@ function getCurrentTabUrl(callback) {
     chrome.tabs.query(queryInfo, (tabs) => {
         var tab = tabs[0];
         url = tab.url.substr(0, 23);
-        console.log(url);
         console.assert(typeof url == 'string', 'tab.url should be a string');
         callback(url);
     });
@@ -80,7 +79,8 @@ function saveTimer() {
     chrome.storage.sync.set({
         'active': active,
         'minute': minute,
-        'started': startTime
+        'started': startTime,
+        'timerOption': timer.value
     });
 }
 
@@ -93,6 +93,9 @@ function getSavedTimer() {
     });
     chrome.storage.sync.get("started", function (obj) {
         startTime = obj['started'];
+    });
+    chrome.storage.sync.get("timerOption", function (obj) {
+        timer.value = obj['timerOption'];
     });
 };
 
@@ -140,11 +143,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         getSavedTimer();
-
+        now = new Date();
         setInterval(function () {
             if (active == true) {
                 now = new Date();
-                console.log(now.getMinutes() + now.getHours());
                 if (now.getMinutes() + now.getHours() === startTime + minute) {
                     setMode('enabled', url);
                     dropdown.value = 'enabled';
@@ -155,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-        }, 6000)
+        }, 60000)
 
         getSavedTick();
 
