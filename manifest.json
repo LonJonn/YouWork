@@ -1,23 +1,22 @@
 {
-    "manifest_version": 2,
+  "manifest_version": 2,
 
-    "name": "YouWork",
-    "description": "Stop reading this, just do your work...",
-    "version": "1.0",
-
-    "browser_action": {
-        "default_icon": "icon.png",
-        "default_popup": "popup.html",
-        "default_title": "??!"
-    },
-
-    "permissions": [
+  "name": "You Actually Work",
+  "version": "2.0",
+  "description": "Omae wa mou...",
+  "browser_action": {
+    "default_icon": "icon.png"
+  },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "permissions": [
+    "tabs",
     "activeTab",
     "storage",
-    "alarms"
-  ],
-
-    "background": {
-        "scripts": ["background.js"]
-    }
+    "notifications",
+    "http://*/",
+    "https://*/"
+  ]
 }
