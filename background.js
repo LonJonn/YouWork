@@ -1,9 +1,17 @@
 chrome.runtime.onInstalled.addListener(function(details) {
   if (details.reason == 'install') {
-    chrome.storage.sync.set({ on: false })
+    chrome.storage.sync.set({ on: true })
     console.log('initiallise')
   }
 })
+
+// chrome.browserAction.onClicked.addListener(function(tab) {
+//   chrome.storage.sync.get('on', data => {
+//     chrome.storage.sync.set({ on: !data.on })
+//     injectCSS()
+//   })
+// })
+chrome.storage.sync.set({ on: true })
 
 chrome.tabs.onActivated.addListener(function() {
   injectCSS()
@@ -13,13 +21,6 @@ chrome.tabs.onUpdated.addListener(function(tabId, info) {
   if (info.status === 'complete') {
     injectCSS()
   }
-})
-
-chrome.browserAction.onClicked.addListener(function(tab) {
-  chrome.storage.sync.get('on', data => {
-    chrome.storage.sync.set({ on: !data.on })
-    injectCSS()
-  })
 })
 
 function injectCSS() {
